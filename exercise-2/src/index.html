@@ -1,78 +1,159 @@
-<!DOCTYPE html>
+<!-- Code Notes -->
+
+<!--
+* Duplikasi ID :
+
+1. Perhatikan, ID harus unik dalam dokumen HTML. Jika terdapat duplikasi ID, maka hanya elemen pertama yang akan diidentifikasi oleh JavaScript atau CSS.
+
+* Duplikasi :
+
+Terdapat duplikasi form, tidak perlu 2 form dengan fungsi yang sama.
+
+* Penggunaan tag :
+
+1. tag yang tidak memiliki child element sebaiknya tidak menggunakan tag pembuka dan penutup, dan langsung ditulis sebagai Self-closing tag.
+
+2.
+
+* Keterbacaan code :
+
+1. daripada menggunakan tag defer, lebih baik letakkan di akhir body sebelum penutup body atau seluruh script menggunakan tag defer. Hal ini supaya memudahkan dalam membaca dan memahami struktur kode.
+
+2. Dari pada menuliskan script disini lebih baik pisahkan dan buat file baru, kemudian panggil script yang baru dibuat
+
+* Ai :
+
+MASALAH YANG DITEMUKAN:
+1. CRITICAL - Duplikasi ID:
+   - id="notes-grid" muncul 2x (div & section)
+   - id="note-form" muncul 2x (duplikasi form)
+
+2. HIGH - Inconsistent Script Loading:
+   - Mixing ES6 modules dengan non-module scripts
+   - Inline script sebaiknya dipisah ke file terpisah
+
+3. MEDIUM - HTML Structure:
+   - Tag kosong tidak menggunakan self-closing format
+   - Duplikasi form yang tidak diperlukan
+
+-->
+
+<!-- Sebelum -->
+<!-- <!doctype html> -->
+
+<!-- Setelah -->
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notes App</title>
-  <script src="./components/NoteItem.js" defer></script>  <!-- Pastikan pathnya sesuai -->
-</head>
-<body>
-  <header>
-    <app-bar></app-bar>
-  </header>
-  <main>
-    <loading-indicator id="loadingIndicator" style="display: none;"></loading-indicator>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes App</title>
 
-    <form id="note-form">
-      <input-catatan></input-catatan>
-    </form>    
+    <!-- Pindahkan ke bawah -->
+    <!-- Pastikan pathnya sesuai -->
+    <!-- <script src="./components/NoteItem.js" defer></script> -->
 
-    <div id="note-list-container"></div>
+    <!--
+    Atau pindahkan semua disini
 
-    <button id="add-note-btn">Add Note</button>
+    <script src="./components/NoteItem.js" defer></script>
+    <script src="./components/notes.js" defer></script>
+    <script type="module" src="api.js" defer></script>
+    -->
+  </head>
+  <body>
+    <header>
+      <!-- Sebelum -->
+      <!-- <app-bar></app-bar> -->
 
-    <div id="add-note-modal" style="display: none;">
-      <button id="close-modal">Close</button>
+      <!-- Setelah -->
+      <app-bar />
+    </header>
+    <main>
+      <loading-indicator
+        id="loadingIndicator"
+        style="display: none"
+      ></loading-indicator>
+
+      <!-- Perhatikan ID -->
       <form id="note-form">
-        <input type="text" id="note-title" placeholder="Title" required />
-        <textarea id="note-body" placeholder="Body" required></textarea>
-        <button type="submit">Submit</button>
+        <!-- Sebelum -->
+        <!-- <input-catatan></input-catatan> -->
+
+        <!-- Setelah -->
+        <input-catatan />
       </form>
-    </div>
 
+      <div id="note-list-container"></div>
 
-    <h3 id="progress-label">Progress</h3>
-    <progress id="progress-bar" value="50" max="100" aria-labelledby="progress-label"></progress>
- 
-    <label for="note-category">Choose a category:</label>
-    <select id="note-category" aria-label="Choose note category">
-      <option value="work" data-icon="🖥️">Work</option>
-      <option value="personal" data-icon="🏡">Personal</option>
-      <option value="study" data-icon="📚">Study</option>
-      <option value="creative" data-icon="💡">Creative Ideas</option>
-    </select>
- 
-    <div class="tooltip">
-      <span class="tooltip-text">Choose a category for your note</span>
-    </div>
- 
-    <label>
-      <input type="checkbox" id="note-priority" /> Mark as priority
-    </label>
+      <button id="add-note-btn">Add Note</button>
 
-    <div id="notes-grid"></div>
+      <!-- <div id="add-note-modal" style="display: none">
+        <button id="close-modal">Close</button>
 
-    <section id="notes-grid" aria-label="Notes Grid"></section>
+         Perhatikan ID
+        <form id="note-form">
+          <input type="text" id="note-title" placeholder="Title" required />
+          <textarea id="note-body" placeholder="Body" required></textarea>
+          <button type="submit">Submit</button>
+        </form>
+      </div> -->
 
-    <script>
-      // Menampilkan indikator loading saat mengambil data
-      const loadingIndicator = document.getElementById('loadingIndicator');
-      loadingIndicator.style.display = 'block';
-  
-      // Simulasi pengambilan data (misalnya 2 detik)
-      setTimeout(() => {
-        // Sembunyikan indikator loading setelah data dimuat
-        loadingIndicator.style.display = 'none';
-  
-        // Simulasi penampilan konten setelah loading selesai
-        document.getElementById('notes-grid').innerHTML = "<p>Data berhasil dimuat!</p>";
-      }, 2000); // Simulasi delay
-    </script>
-    
-    <script src="./components/notes.js"></script>
+      <h3 id="progress-label">Progress</h3>
+      <progress
+        id="progress-bar"
+        value="50"
+        max="100"
+        aria-labelledby="progress-label"
+      ></progress>
 
-    <script type="module" src="api.js"></script>
-  </main>
-</body>
+      <label for="note-category">Choose a category:</label>
+      <select id="note-category" aria-label="Choose note category">
+        <option value="work" data-icon="🖥️">Work</option>
+        <option value="personal" data-icon="🏡">Personal</option>
+        <option value="study" data-icon="📚">Study</option>
+        <option value="creative" data-icon="💡">Creative Ideas</option>
+      </select>
+
+      <div class="tooltip">
+        <span class="tooltip-text">Choose a category for your note</span>
+      </div>
+
+      <label>
+        <input type="checkbox" id="note-priority" /> Mark as priority
+      </label>
+
+      <!-- Perhatikan ID -->
+      <!-- <div id="notes-grid"></div> -->
+
+      <!-- Perhatikan ID -->
+      <section id="notes-grid" aria-label="Notes Grid"></section>
+
+      <!-- Dari pada menuliskan script disini lebih baik pisahkan dan buat file baru, kemudian panggil script yang baru dibuat -->
+      <!-- <script>
+        // Menampilkan indikator loading saat mengambil data
+        const loadingIndicator = document.getElementById("loadingIndicator");
+        loadingIndicator.style.display = "block";
+
+        // Simulasi pengambilan data (misalnya 2 detik)
+        setTimeout(() => {
+          // Sembunyikan indikator loading setelah data dimuat
+          loadingIndicator.style.display = "none";
+
+          // Simulasi penampilan konten setelah loading selesai
+          document.getElementById("notes-grid").innerHTML =
+            "<p>Data berhasil dimuat!</p>";
+        }, 2000); // Simulasi delay
+      </script> -->
+
+      <!-- Script disini -->
+      <!-- <script src="./components/NoteItem.js"></script> -->
+      <!-- <script src="./components/notes.js"></script> -->
+      <!-- Perhatikan type module, karena dalam package.json menggunakan common js lebih baik tidak menggunakan type module, karena -->
+      <!-- <script type="module" src="api.js"></script> -->
+
+      <!-- biarkan webpack melakukan tugasnya -->
+      <script src="bundle.js"></script>
+    </main>
+  </body>
 </html>
-
