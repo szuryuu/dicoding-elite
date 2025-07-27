@@ -2,26 +2,26 @@ import { notesData } from "./notes.js";
 
 // Simpan catatan ke localStorage
 function saveNotesToLocalStorage(notes) {
-  localStorage.setItem('notes', JSON.stringify(notes));
+  localStorage.setItem("notes", JSON.stringify(notes));
 }
 
 // Ambil catatan dari localStorage
 function loadNotesFromLocalStorage() {
-  const notes = localStorage.getItem('notes');
+  const notes = localStorage.getItem("notes");
   return notes ? JSON.parse(notes) : notesData;
 }
 
 // Tampilkan catatan pada halaman
 function displayNotes(notes) {
-  const notesGrid = document.getElementById('notes-grid');
-  notesGrid.innerHTML = ''; // Clear the grid before displaying new notes
+  const notesGrid = document.getElementById("notes-grid");
+  notesGrid.innerHTML = ""; // Clear the grid before displaying new notes
 
-  notes.forEach(note => {
-    const noteItem = document.createElement('note-item');
-    noteItem.setAttribute('note-id', note.id);
-    noteItem.setAttribute('title', note.title);
-    noteItem.setAttribute('body', note.body);
-    noteItem.setAttribute('created-at', note.createdAt);
+  notes.forEach((note) => {
+    const noteItem = document.createElement("note-item");
+    noteItem.setAttribute("note-id", note.id);
+    noteItem.setAttribute("title", note.title);
+    noteItem.setAttribute("body", note.body);
+    noteItem.setAttribute("created-at", note.createdAt);
     notesGrid.appendChild(noteItem);
   });
 }
@@ -30,16 +30,16 @@ function displayNotes(notes) {
 let notes = loadNotesFromLocalStorage();
 
 // Menampilkan catatan yang ada saat halaman dimuat
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   displayNotes(notes);
 });
 
 // Menambahkan event listener untuk form InputCatatan
-document.addEventListener('DOMContentLoaded', () => {
-  const inputCatatan = document.querySelector('input-catatan');
+document.addEventListener("DOMContentLoaded", () => {
+  const inputCatatan = document.querySelector("input-catatan");
 
   if (inputCatatan) {
-    inputCatatan.addEventListener('save-note', (event) => {
+    inputCatatan.addEventListener("save-note", (event) => {
       const newNote = event.detail;
       notes.push(newNote);
       saveNotesToLocalStorage(notes);
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 class InputCatatan extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
@@ -88,40 +88,42 @@ class InputCatatan extends HTMLElement {
       </div>
     `;
 
-    this.shadowRoot.getElementById('save-note').addEventListener('click', () => {
-      const title = this.shadowRoot.getElementById('note-title').value;
-      const body = this.shadowRoot.getElementById('note-body').value;
-      if (title && body) {
-        const newNote = {
-          id: `notes-${Date.now()}`,
-          title,
-          body,
-          createdAt: new Date().toISOString(),
-          archived: false
-        };
+    this.shadowRoot
+      .getElementById("save-note")
+      .addEventListener("click", () => {
+        const title = this.shadowRoot.getElementById("note-title").value;
+        const body = this.shadowRoot.getElementById("note-body").value;
+        if (title && body) {
+          const newNote = {
+            id: `notes-${Date.now()}`,
+            title,
+            body,
+            createdAt: new Date().toISOString(),
+            archived: false,
+          };
 
-        // Emit event untuk menambahkan catatan
-        const event = new CustomEvent('save-note', {
-          detail: newNote,
-          bubbles: true
-        });
-        this.dispatchEvent(event);
+          // Emit event untuk menambahkan catatan
+          const event = new CustomEvent("save-note", {
+            detail: newNote,
+            bubbles: true,
+          });
+          this.dispatchEvent(event);
 
-        // Clear form fields after saving
-        this.shadowRoot.getElementById('note-title').value = '';
-        this.shadowRoot.getElementById('note-body').value = '';
-      }
-    });
+          // Clear form fields after saving
+          this.shadowRoot.getElementById("note-title").value = "";
+          this.shadowRoot.getElementById("note-body").value = "";
+        }
+      });
   }
 }
 
-customElements.define('input-catatan', InputCatatan);
+// customElements.define('input-catatan', InputCatatan);
 
 // Komponen Web untuk NoteItem
 class NoteItem extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' }); // Menggunakan shadow DOM
+    this.attachShadow({ mode: "open" }); // Menggunakan shadow DOM
   }
 
   // Fungsi yang dijalankan saat elemen terpasang ke DOM
@@ -132,15 +134,15 @@ class NoteItem extends HTMLElement {
   // Fungsi untuk merender note
   render() {
     // Ambil atribut dari elemen
-    const noteId = this.getAttribute('note-id');
-    const title = this.getAttribute('title');
-    const body = this.getAttribute('body');
-    const createdAt = this.getAttribute('created-at');
+    const noteId = this.getAttribute("note-id");
+    const title = this.getAttribute("title");
+    const body = this.getAttribute("body");
+    const createdAt = this.getAttribute("created-at");
 
     // Format tanggal
     const formattedDate = createdAt
       ? new Date(createdAt).toLocaleString()
-      : 'No Date Provided';
+      : "No Date Provided";
 
     // Template HTML untuk Note Item
     this.shadowRoot.innerHTML = `
@@ -190,8 +192,8 @@ class NoteItem extends HTMLElement {
       </style>
 
       <div class="note-item">
-        <h4>${title || 'Untitled Note'}</h4>
-        <p>${body || 'No content available.'}</p>
+        <h4>${title || "Untitled Note"}</h4>
+        <p>${body || "No content available."}</p>
         <p class="date">Created on: ${formattedDate}</p>
         <div class="actions">
           <button class="delete-btn">Delete</button>
@@ -201,18 +203,18 @@ class NoteItem extends HTMLElement {
     `;
 
     // Event listeners untuk tombol delete dan archive
-    this.shadowRoot.querySelector('.delete-btn').addEventListener('click', () =>
-      this.handleDelete(noteId)
-    );
-    this.shadowRoot.querySelector('.archive-btn').addEventListener('click', () =>
-      this.handleArchive(noteId)
-    );
+    this.shadowRoot
+      .querySelector(".delete-btn")
+      .addEventListener("click", () => this.handleDelete(noteId));
+    this.shadowRoot
+      .querySelector(".archive-btn")
+      .addEventListener("click", () => this.handleArchive(noteId));
   }
 
   // Fungsi untuk menghapus note
   handleDelete(noteId) {
     if (!noteId) return;
-    const deleteEvent = new CustomEvent('delete-note', {
+    const deleteEvent = new CustomEvent("delete-note", {
       detail: { noteId },
       bubbles: true,
       composed: true,
@@ -223,7 +225,7 @@ class NoteItem extends HTMLElement {
   // Fungsi untuk mengarsipkan note
   handleArchive(noteId) {
     if (!noteId) return;
-    const archiveEvent = new CustomEvent('archive-note', {
+    const archiveEvent = new CustomEvent("archive-note", {
       detail: { noteId },
       bubbles: true,
       composed: true,
@@ -233,29 +235,29 @@ class NoteItem extends HTMLElement {
 }
 
 // Mendefinisikan custom element NoteItem
-customElements.define('note-item', NoteItem);
+// customElements.define('note-item', NoteItem);
 
 // Fungsi untuk menampilkan daftar note di dalam container
 export const showNotes = (notes, container) => {
-  if (!Array.isArray(notes)) throw new Error('Notes must be an array');
-  if (!container) throw new Error('Container is required');
+  if (!Array.isArray(notes)) throw new Error("Notes must be an array");
+  if (!container) throw new Error("Container is required");
 
-  container.innerHTML = ''; // Bersihkan kontainer sebelum menambahkan note baru
+  container.innerHTML = ""; // Bersihkan kontainer sebelum menambahkan note baru
 
   notes.forEach((note) => {
-    const noteElement = document.createElement('note-item');
-    noteElement.setAttribute('note-id', note.id);
-    noteElement.setAttribute('title', note.title);
-    noteElement.setAttribute('body', note.body);
-    noteElement.setAttribute('created-at', note.createdAt);
+    const noteElement = document.createElement("note-item");
+    noteElement.setAttribute("note-id", note.id);
+    noteElement.setAttribute("title", note.title);
+    noteElement.setAttribute("body", note.body);
+    noteElement.setAttribute("created-at", note.createdAt);
 
     // Event listener untuk delete dan archive
-    noteElement.addEventListener('delete-note', (e) => {
+    noteElement.addEventListener("delete-note", (e) => {
       const { noteId } = e.detail;
       handleDeleteNote(noteId); // Pastikan fungsi ini diimplementasikan di luar
     });
 
-    noteElement.addEventListener('archive-note', (e) => {
+    noteElement.addEventListener("archive-note", (e) => {
       const { noteId } = e.detail;
       handleArchiveNote(noteId); // Pastikan fungsi ini diimplementasikan di luar
     });
@@ -276,11 +278,11 @@ const handleArchiveNote = (noteId) => {
 };
 
 // Menambahkan event listener untuk form InputCatatan
-document.addEventListener('DOMContentLoaded', () => {
-  const inputCatatan = document.querySelector('input-catatan');
+document.addEventListener("DOMContentLoaded", () => {
+  const inputCatatan = document.querySelector("input-catatan");
 
   if (inputCatatan) {
-    inputCatatan.addEventListener('save-note', (event) => {
+    inputCatatan.addEventListener("save-note", (event) => {
       const newNote = event.detail;
       notes.push(newNote);
       saveNotesToLocalStorage(notes);
@@ -294,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
 class AppBar extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
@@ -346,14 +348,13 @@ class AppBar extends HTMLElement {
 }
 
 // Mendefinisikan custom element AppBar
-customElements.define('app-bar', AppBar);
-
+// customElements.define('app-bar', AppBar);
 
 // Membuat elemen LoadingIndicator
 class LoadingIndicator extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
   }
 
   connectedCallback() {
@@ -391,4 +392,21 @@ class LoadingIndicator extends HTMLElement {
 }
 
 // Mendefinisikan custom element LoadingIndicator
-customElements.define('loading-indicator', LoadingIndicator);
+// customElements.define('loading-indicator', LoadingIndicator);
+
+// Melakukan pengecekan apakah custom element sudah terdefinisi sebelumnya
+if (!customElements.get("input-catatan")) {
+  customElements.define("input-catatan", InputCatatan);
+}
+
+if (!customElements.get("note-item")) {
+  customElements.define("note-item", NoteItem);
+}
+
+if (!customElements.get("app-bar")) {
+  customElements.define("app-bar", AppBar);
+}
+
+if (!customElements.get("loading-indicator")) {
+  customElements.define("loading-indicator", LoadingIndicator);
+}

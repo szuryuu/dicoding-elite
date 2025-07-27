@@ -76,13 +76,14 @@ MASALAH YANG DITEMUKAN:
       ></loading-indicator>
 
       <!-- Perhatikan ID -->
-      <form id="note-form">
-        <!-- Sebelum -->
-        <!-- <input-catatan></input-catatan> -->
+      <!-- <form id="note-form"> -->
+      <!-- Sebelum -->
+      <!-- <input-catatan></input-catatan> -->
 
-        <!-- Setelah -->
-        <input-catatan />
-      </form>
+      <!-- Setelah -->
+      <!-- FIX - form, daripada pakai wrapper mending langsung saja -->
+      <input-catatan />
+      <!-- </form> -->
 
       <!-- Hapus kalo ga perlu -->
       <div id="note-list-container"></div>
@@ -92,8 +93,8 @@ MASALAH YANG DITEMUKAN:
       <div id="add-note-modal" style="display: none">
         <button id="close-modal">Close</button>
 
-        <!-- Perhatikan ID, ubah id -->
-        <form id="modal-note-form">
+        <!-- Perhatikan ID (ubah id) -->
+        <form id="note-form">
           <input type="text" id="note-title" placeholder="Title" required />
           <textarea id="note-body" placeholder="Body" required></textarea>
           <button type="submit">Submit</button>

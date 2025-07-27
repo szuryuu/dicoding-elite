@@ -17,7 +17,6 @@ const addNoteBtn = document.getElementById("add-note-btn");
 const addNoteModal = document.getElementById("add-note-modal");
 const closeModalBtn = document.getElementById("close-modal");
 const noteForm = document.getElementById("note-form");
-const modalForm = document.getElementById("modal-note-form");
 
 // Pindahaan dari index.html
 const loadingIndicator = document.getElementById("loadingIndicator");
@@ -29,8 +28,8 @@ setTimeout(() => {
   loadingIndicator.style.display = "none";
 
   // Simulasi penampilan konten setelah loading selesai
-  // document.getElementById("notes-grid").innerHTML =
-  //   "<p>Data berhasil dimuat!</p>";
+  document.getElementById("notes-grid").innerHTML =
+    "<p>Data berhasil dimuat!</p>";
 }, 2000); // Simulasi delay
 // Pindahan selesai
 
@@ -109,7 +108,6 @@ const handleArchiveNote = async (noteId) => {
 addNoteBtn.addEventListener("click", openAddNoteModal);
 closeModalBtn.addEventListener("click", closeAddNoteModal);
 noteForm.addEventListener("submit", handleAddNote);
-modalForm.addEventListener("submit", handleAddNote);
 
 // Initialize the app with notes
 displayNotes();
