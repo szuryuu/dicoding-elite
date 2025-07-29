@@ -11,12 +11,15 @@ const addNoteBtn = document.getElementById('add-note-btn');
 const addNoteModal = document.getElementById('add-note-modal');
 const closeModalBtn = document.getElementById('close-modal');
 const noteForm = document.getElementById('note-form');
+const apiNoteForm = document.getElementById('api-note-form');
+
 
 // Display notes on the main page
 const displayNotes = async () => {
   try {
     const notes = await getNotes(); // Menggunakan getNotes
     showNotes(notes, noteListContainer); // Render notes
+    console.log("displayNotes");
   } catch (error) {
     console.error("Error fetching notes:", error);
     alert('Failed to load notes');
@@ -26,11 +29,13 @@ const displayNotes = async () => {
 // Open the modal to add a new note
 const openAddNoteModal = () => {
   addNoteModal.style.display = 'block';
+  console.log("Open Modal");
 };
 
 // Close the modal
 const closeAddNoteModal = () => {
   addNoteModal.style.display = 'none';
+  console.log("close modal");
 };
 
 // Add a new note from the form in the modal
@@ -85,6 +90,7 @@ const handleArchiveNote = async (noteId) => {
 addNoteBtn.addEventListener('click', openAddNoteModal);
 closeModalBtn.addEventListener('click', closeAddNoteModal);
 noteForm.addEventListener('submit', handleAddNote);
+apiNoteForm.addEventListener('submit', handleAddNote);
 
 // Initialize the app with notes
 displayNotes();
@@ -93,4 +99,14 @@ displayNotes();
 window.addEventListener('DOMContentLoaded', async () => {
   const notes = await fetchNotes();
   renderNotes(notes); // Render notes on page load
+});
+
+document.addEventListener('delete-note', async (event) => {
+  const { noteId } = event.detail;
+  await handleDeleteNote(noteId);
+});
+
+document.addEventListener('archive-note', async (event) => {
+  const { noteId } = event.detail;
+  await handleArchiveNote(noteId);
 });

@@ -1,4 +1,4 @@
-const API_URL = 'https://notes-api.dicoding.dev/v2'; // Ganti dengan URL API yang sebenarnya
+const API_URL = 'https://notes-api.dicoding.dev/v2/notes'; // Ganti dengan URL API yang sebenarnya
 
 // Menampilkan feedback ke pengguna dengan pesan kustom
 const showUserFeedback = (message, isError = false) => {
@@ -46,7 +46,12 @@ const apiRequest = async (url, options = {}) => {
 
 // Fungsi untuk mendapatkan semua notes
 const getNotes = async () => {
-  return await apiRequest(API_URL);
+  //Sebelum
+  //return await apiRequest(API_URL);
+
+  //Sesudah
+  const response = await apiRequest(API_URL);
+  return response.data;
 };
 
 // Fungsi untuk menambahkan note baru
@@ -64,11 +69,11 @@ const addNote = async (note) => {
 // Fungsi untuk mengarsipkan note (mengubah status menjadi archived)
 const archiveNote = async (noteId) => {
   const options = {
-    method: 'PUT',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ archived: true }),
   };
-  const updatedNote = await apiRequest(`${API_URL}/${noteId}`, options);
+  const updatedNote = await apiRequest(`${API_URL}/${noteId}/archive`, options);
   showUserFeedback('Note archived successfully!');
   return updatedNote;
 };
