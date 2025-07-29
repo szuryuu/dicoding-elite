@@ -109,7 +109,7 @@ const displayNotes = (notes) => {
       noteElement.className = 'note-item';
       noteElement.innerHTML = `
         <h3>${note.title}</h3>
-        <p>${note.content}</p>
+        <p>${note.body}</p>
         <small>Created at: ${new Date(note.createdAt).toLocaleString()}</small>
         <div class="note-actions">
           <button onclick="archiveNote('${note.id}')">Archive</button>
