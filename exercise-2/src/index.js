@@ -7,7 +7,7 @@ import "./styles/main.css"; // Import CSS (Webpack will bundle this)
 import "./components/NoteItem"; // Custom element/component
 
 // Lebih baik gunakan data dari API saja
-// import { fetchNotes, renderNotes } from "./components/notes";
+import { fetchNotes, renderNotes } from "./components/notes";
 import { getNotes, addNote, deleteNote, archiveNote } from "./api";
 import { showNotes } from "./components/NoteItem";
 
@@ -114,7 +114,7 @@ displayNotes();
 
 // Hapus data fake note
 // Fetch notes and render them when the page loads
-// window.addEventListener("DOMContentLoaded", async () => {
-//   const notes = await fetchNotes();
-//   renderNotes(notes); // Render notes on page load
-// });
+window.addEventListener("DOMContentLoaded", async () => {
+  const notes = await fetchNotes();
+  renderNotes(notes); // Render notes on page load
+});

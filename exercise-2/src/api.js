@@ -1,6 +1,6 @@
-// Code Review
-//
-// URL https://notes-api.dicoding.dev/v2 bukan merupakan endpoint langsung untuk API catatan. Untuk mengakses data catatan, perlu menambahkan endpoint /notes sehingga menjadi https://notes-api.dicoding.dev/v2/notes
+// Code Review - FIXED VERSION
+// URL https://notes-api.dicoding.dev/v2 bukan merupakan endpoint langsung untuk API catatan.
+// Untuk mengakses data catatan, perlu menambahkan endpoint /notes sehingga menjadi https://notes-api.dicoding.dev/v2/notes
 
 const API_URL = "https://notes-api.dicoding.dev/v2/notes"; // Ganti dengan URL API yang sebenarnya
 
@@ -35,6 +35,7 @@ const handleResponse = async (response) => {
     showUserFeedback(errorData.message || "Request failed", true);
     throw new Error(errorData.message || "Request failed");
   }
+
   return await response.json();
 };
 
@@ -42,8 +43,9 @@ const handleResponse = async (response) => {
 const apiRequest = async (url, options = {}) => {
   try {
     const response = await fetch(url, options);
-    // console.log(await handleResponse(response));
-    return await handleResponse(response);
+    const result = await handleResponse(response);
+    console.log("API Response:", result);
+    return result;
   } catch (error) {
     console.error("Error during fetch request:", error);
     showUserFeedback("An error occurred. Please try again later.", true);
@@ -54,8 +56,6 @@ const apiRequest = async (url, options = {}) => {
 // Fungsi untuk mendapatkan semua notes
 const getNotes = async () => {
   const response = await apiRequest(API_URL);
-  console.log("API Response:", response);
-  console.log(response.data);
   return response.data;
 };
 
@@ -92,14 +92,19 @@ const deleteNote = async (noteId) => {
 };
 
 // Fungsi untuk menyegarkan tampilan catatan
-const refreshNotes = async () => {
-  const notes = await getNotes();
-  displayNotes(notes);
-};
+// const refreshNotes = async () => {
+//   const notes = await getNotes();
+//   displayNotes(notes);
+// };
 
 // Fungsi untuk menampilkan notes secara dinamis
 const displayNotes = (notes) => {
   const notesContainer = document.getElementById("notes-grid");
+  if (!notesContainer) {
+    console.error("Notes container not found");
+    return;
+  }
+
   notesContainer.innerHTML = ""; // Clear previous notes
 
   if (notes.length === 0) {
@@ -123,18 +128,68 @@ const displayNotes = (notes) => {
       `;
       notesContainer.appendChild(noteElement);
     });
+
+    setupNoteEventListeners();
+  }
+};
+
+// Setup event listeners for note actions
+const setupNoteEventListeners = () => {
+  const notesContainer = document.getElementById("notes-grid");
+  if (!notesContainer) return;
+
+  // Remove existing listeners
+  notesContainer.replaceWith(notesContainer.cloneNode(true));
+  const newContainer = document.getElementById("notes-grid");
+
+  newContainer.addEventListener("click", async (e) => {
+    const noteId = e.target.dataset.noteId;
+    if (!noteId) return;
+
+    if (e.target.classList.contains("delete-btn")) {
+      try {
+        await deleteNote(noteId);
+        refreshNotes();
+      } catch (error) {
+        console.error("Error deleting note:", error);
+      }
+    } else if (e.target.classList.contains("archive-btn")) {
+      try {
+        await archiveNote(noteId);
+        refreshNotes();
+      } catch (error) {
+        console.error("Error archiving note:", error);
+      }
+    }
+  });
+};
+
+// Fungsi untuk menyegarkan tampilan catatan
+const refreshNotes = async () => {
+  try {
+    const notes = await getNotes();
+    displayNotes(notes);
+  } catch (error) {
+    console.error("Error refreshing notes:", error);
+    showUserFeedback("Failed to refresh notes", true);
   }
 };
 
 // Ambil catatan dan tampilkan saat halaman dimuat
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const notes = await getNotes();
-    displayNotes(notes); // Menampilkan catatan setelah data diterima
+    await refreshNotes();
   } catch (error) {
     console.error("Error loading notes:", error);
   }
 });
 
 // Ekspor fungsi untuk digunakan di bagian lain dari aplikasi
-export { getNotes, addNote, archiveNote, deleteNote, refreshNotes };
+export {
+  getNotes,
+  addNote,
+  archiveNote,
+  deleteNote,
+  refreshNotes,
+  displayNotes,
+};
