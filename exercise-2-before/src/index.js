@@ -92,7 +92,6 @@ closeModalBtn.addEventListener('click', closeAddNoteModal);
 noteForm.addEventListener('submit', handleAddNote);
 apiNoteForm.addEventListener('submit', handleAddNote);
 
-
 // Initialize the app with notes
 displayNotes();
 
@@ -100,4 +99,14 @@ displayNotes();
 window.addEventListener('DOMContentLoaded', async () => {
   const notes = await fetchNotes();
   renderNotes(notes); // Render notes on page load
+});
+
+document.addEventListener('delete-note', async (event) => {
+  const { noteId } = event.detail;
+  await handleDeleteNote(noteId);
+});
+
+document.addEventListener('archive-note', async (event) => {
+  const { noteId } = event.detail;
+  await handleArchiveNote(noteId);
 });
