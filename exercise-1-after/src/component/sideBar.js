@@ -1,14 +1,14 @@
-import IconPeople from '../assets/img/people-3.png'
-import IconXmark from '../assets/img/circle-xmark-solid.png'
-class sideBar extends HTMLElement{
-    constructor(){
-        super()
-        this._shaddowRoot = this.attachShadow({mode:'open'})
-        this._styles = document.createElement('style')
-    }
+import IconPeople from "../assets/img/people-3.png";
+import IconXmark from "../assets/img/circle-xmark-solid.png";
+class sideBar extends HTMLElement {
+  constructor() {
+    super();
+    this._shaddowRoot = this.attachShadow({ mode: "open" });
+    this._styles = document.createElement("style");
+  }
 
-    _UpdateStyles(){
-        this._styles.textContent = `
+  _UpdateStyles() {
+    this._styles.textContent = `
         :host{
             display: flex;
             flex-direction: column;
@@ -18,17 +18,17 @@ class sideBar extends HTMLElement{
             align-items: center;
             background-color: rgb(100, 92, 187);
             overflow: hidden;
-            position: fixed;  
-            width: 25%;        
+            position: fixed;
+            width: 25%;
         }
-        
+
         .side-bar-first{
             text-align: center;
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-        
+
         .side-bar-first h2{
             font-family: 'poppins';
 
@@ -39,14 +39,14 @@ class sideBar extends HTMLElement{
         .side-bar-first h2:nth-child(2){
             display: none;
         }
-        
+
         .side-bar-first .new-note p{
             font-family: 'calibri';
             font-weight: bold;
             font-size: 1.1rem;
             color: white;
         }
-        
+
         .side-bar-first .new-note-plus{
             display: none;
         }
@@ -105,10 +105,10 @@ class sideBar extends HTMLElement{
             border: 1px solid rgb(217, 217, 217);
             border-radius: 5px;
             padding: 0.5rem;
-            box-sizing: border-box; 
+            box-sizing: border-box;
             background-color: rgb(255,255,255);
         }
-        
+
         .input_newNotes button{
             width: 100%;
             border: none;
@@ -153,14 +153,14 @@ class sideBar extends HTMLElement{
             width: 2rem;
             cursor: pointer;
         }
-        
-        
+
+
         @media screen and (max-width: 768px) {
             :host{
                 height: 4rem;
                 width: 100%;
                 top: 50%
-                position: fixed;   
+                position: fixed;
             }
 
             .side-bar-first h2{
@@ -172,7 +172,7 @@ class sideBar extends HTMLElement{
                 flex-direction: row;
                 justify-content: space-around;
                 align-items: center;
-                width: 100%; 
+                width: 100%;
             }
 
             .side-bar-first h2:nth-child(2){
@@ -189,71 +189,103 @@ class sideBar extends HTMLElement{
                 top: 4.5rem;
             }
         }
-    `}
-    
-    connectedCallback(){
-        this.render()
+    `;
+  }
 
-        this._shaddowRoot.querySelector(".btn-new-note").addEventListener("click", function () {
-            document.querySelector("side-bar")._shaddowRoot.querySelector('#inputNewNotes').classList.toggle('active');
-            document.querySelector("side-bar")._shaddowRoot.querySelector('.formNewNotes').classList.toggle('active-bg');
+  connectedCallback() {
+    this.render();
+
+    this._shaddowRoot
+      .querySelector(".btn-new-note")
+      .addEventListener("click", function () {
+        document
+          .querySelector("side-bar")
+          ._shaddowRoot.querySelector("#inputNewNotes")
+          .classList.toggle("active");
+        document
+          .querySelector("side-bar")
+          ._shaddowRoot.querySelector(".formNewNotes")
+          .classList.toggle("active-bg");
+      });
+
+    this._shaddowRoot
+      .querySelector(".btn-plus")
+      .addEventListener("click", function () {
+        document
+          .querySelector("side-bar")
+          ._shaddowRoot.querySelector("#inputNewNotes")
+          .classList.toggle("active");
+        document
+          .querySelector("side-bar")
+          ._shaddowRoot.querySelector(".formNewNotes")
+          .classList.toggle("active-bg");
+      });
+
+    this._shaddowRoot
+      .querySelector(".xmark")
+      .addEventListener("click", function () {
+        document
+          .querySelector("side-bar")
+          ._shaddowRoot.querySelector("#inputNewNotes")
+          .classList.remove("active");
+        document
+          .querySelector("side-bar")
+          ._shaddowRoot.querySelector(".formNewNotes")
+          .classList.remove("active-bg");
+      });
+
+    const form = document
+      .querySelector("side-bar")
+      ._shaddowRoot.querySelector("#inputNote");
+    const inputTitle = document
+      .querySelector("side-bar")
+      ._shaddowRoot.querySelector(".title");
+    const inputbody = document
+      .querySelector("side-bar")
+      ._shaddowRoot.querySelector(".body");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const notes = {
+        title: inputTitle.value,
+        body: inputbody.value,
+      };
+
+      insertBook(notes);
+    });
+
+    const insertBook = (note) => {
+      console.log(note);
+      fetch(`https://notes-api.dicoding.dev/v2/notes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(note),
+      })
+        .then((response) => {
+          return response.json();
         })
-
-        this._shaddowRoot.querySelector(".btn-plus").addEventListener("click", function () {
-            document.querySelector("side-bar")._shaddowRoot.querySelector('#inputNewNotes').classList.toggle('active');
-            document.querySelector("side-bar")._shaddowRoot.querySelector('.formNewNotes').classList.toggle('active-bg');
+        .then((responseJson) => {
+          window.location.reload();
+          return responseJson;
         })
-
-        this._shaddowRoot.querySelector(".xmark").addEventListener("click", function () {
-            document.querySelector("side-bar")._shaddowRoot.querySelector('#inputNewNotes').classList.remove("active");
-            document.querySelector("side-bar")._shaddowRoot.querySelector('.formNewNotes').classList.remove("active-bg");
-        })
-
-        const form = document.querySelector("side-bar")._shaddowRoot.querySelector("#inputNote");      
-        const inputTitle = document.querySelector("side-bar")._shaddowRoot.querySelector(".title");   
-        const inputbody = document.querySelector("side-bar")._shaddowRoot.querySelector(".body");   
-
-        form.addEventListener('submit', function (e) {
-            e.preventDefault()
-            const notes = {
-            title: inputTitle.value,
-            body: inputbody.value,
-            };
-
-            insertBook(notes);
+        .catch((e) => {
+          showResponseMessage(e);
         });
- 
-        const insertBook = (note) => {
-            console.log(note)
-            fetch(`https://notes-api.dicoding.dev/v2/notes`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(note),
-              })
-              .then((response) => {
-                return response.json();
-              })
-              .then((responseJson) => {
-                window.location.reload();
-                return responseJson;
-              })
-              .catch((e) => {
-                showResponseMessage(e)
-              });
-          };  
+    };
 
-          const showResponseMessage = (message = 'Check your internet connection') => {
-            alert(message);
-          };
-          
-    }
+    const showResponseMessage = (
+      message = "Check your internet connection",
+    ) => {
+      alert(message);
+    };
+  }
 
-    render(){
-        this._UpdateStyles()
-        this._shaddowRoot.appendChild(this._styles)
-        this._shaddowRoot.innerHTML += `
+  render() {
+    this._UpdateStyles();
+    this._shaddowRoot.appendChild(this._styles);
+    this._shaddowRoot.innerHTML += `
         <div class="side-bar-first">
             <h2>.Notes.</h2>
             <h2 class="btn-plus">+</h2>
@@ -262,15 +294,15 @@ class sideBar extends HTMLElement{
                 <button class="btn-new-note">+new note</button>
             </div>
         </div>
-        
+
         <div class="formNewNotes">
             <div id="inputNewNotes" class="input_newNotes">
                 <div class="xmark"><img src="${IconXmark}" alt=""></div>
                 <h4 id="input_notes">Masukan Catatan Baru</h4>
                     <form id="inputNote">
                         <div class="input">
-                        <input class="id" name="id" type="text" placeholder="Id.." hidden> 
-                        </div>  
+                        <input class="id" name="id" type="text" placeholder="Id.." hidden>
+                        </div>
 
                         <div class="input">
                         <label for="inputtitle">Judul</label> <br>
@@ -290,7 +322,7 @@ class sideBar extends HTMLElement{
                             <label for="inputbody">Isi Catatan</label><br>
                         <textarea  placeholder="ketik catatan.." placeholder="catatan.." class="body" name="body" id="inputbody" cols="30" rows="10"></textarea>
                         </div>
-                        
+
                         <div class="buttonForm">
                             <button class="bookSubmit" type="submit">Simpan</button>
                             </div>
@@ -301,8 +333,7 @@ class sideBar extends HTMLElement{
         <div class="side-bar-second">
                 <img src="${IconPeople}" alt="">
         </div>
-        ` 
-          
-    }
+        `;
+  }
 }
-customElements.define("side-bar", sideBar)
+customElements.define("side-bar", sideBar);
