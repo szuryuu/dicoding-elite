@@ -163,14 +163,20 @@ class dataNotes extends HTMLElement {
     const templateCharItem = (notesData) => {
       notesData.forEach((notes) => {
         this._shaddowRoot.innerHTML += `
-            <div class="notes" >
+            <div class="notes" data-note-id="${notes.id}">
                <div>
                     <div class="title">${notes.title}</div>
                     <div class="body">${notes.body}</div>
                 </div>
 
                 <div class="underNotes">
-                    <div class="time"> ${notes.createdAt.substring(0, 10)} |  ${notes.createdAt.substring(11, 16)} WIB</div>
+                    <div class="time"> ${notes.createdAt.substring(0, 10)} |  ${new Date(
+                      notes.createdAt,
+                    ).toLocaleString("id-ID", {
+                      timeZone: "Asia/Jakarta",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })} WIB</div>
                     <div class="feature">
                         <div class="featureIcon delete">
                             <img class="btnDelete" src="${iconTrash}" alt="">
@@ -180,9 +186,13 @@ class dataNotes extends HTMLElement {
             </div>
             `;
 
-        this._shaddowRoot.querySelectorAll(".btnDelete").forEach((button) => {
-          button.addEventListener("click", () => this.removenotes(notes.id));
+        this._shaddowRoot.addEventListener("click", (e) => {
+          if (e.target.classList.contains("btnDelete")) {
+            const noteId = e.target.closest(".notes").dataset.noteId;
+            this.removenotes(noteId);
+          }
         });
+
         this._shaddowRoot.querySelectorAll(".btnEdit").forEach((button) => {
           button.addEventListener("click", () =>
             this.editnotes(notes.id, notes.title, notes.body),
