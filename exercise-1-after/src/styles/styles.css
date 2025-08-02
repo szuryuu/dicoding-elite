@@ -1,11 +1,11 @@
 @font-face {
     font-family: "fredokaOne";
-    src: url(../assets/font/FredokaOne-Regular.ttf);
+    src: url("../assets/font/FredokaOne-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "poppins";
-    src: url(../assets/font/Poppins-Regular.ttf);
+    src: url("../assets/font/Poppins-Regular.ttf") format("truetype");
 }
 
 *,

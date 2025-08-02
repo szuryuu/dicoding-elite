@@ -12,27 +12,27 @@ module.exports = {
       /* style and css loader */
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: "style-loader",
-          },
-          {
-            loader: "css-loader",
-          },
-        ],
+        use: ["style-loader", "css-loader"],
       },
 
       {
-        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: "file-loader",
-          options: {
-            name: "[name].[hash].[ext]",
-            outputPath: "fonts",
-            esModule: false,
-          },
+        test: /\.(woff(2)?|eot|ttf|otf)$/i,
+        type: "asset/resource",
+        generator: {
+          filename: "fonts/[name][hash][ext]",
         },
       },
+      // {
+      //   test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+      //   use: {
+      //     loader: "file-loader",
+      //     options: {
+      //       name: "[name].[hash].[ext]",
+      //       outputPath: "fonts",
+      //       esModule: false,
+      //     },
+      //   },
+      // },
       {
         test: /\.(png|jp?g|svg)$/,
         use: [
@@ -44,10 +44,10 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: "asset/resource",
-      },
+      // {
+      //   test: /\.(woff|woff2|eot|ttf|otf)$/i,
+      //   type: "asset/resource",
+      // },
     ],
   },
   plugins: [

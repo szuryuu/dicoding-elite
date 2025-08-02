@@ -1,11 +1,11 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
- 
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = {
-  entry: './src/index.js',
+  entry: "./src/index.js",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
   },
   module: {
     rules: [
@@ -14,16 +14,14 @@ module.exports = {
         test: /\.css$/,
         use: [
           {
-            loader: 'style-loader',
+            loader: "style-loader",
           },
           {
-            loader: 'css-loader',
+            loader: "css-loader",
           },
         ],
-        
       },
-      
-      
+
       {
         test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
         use: {
@@ -31,30 +29,31 @@ module.exports = {
           options: {
             name: "[name].[hash].[ext]",
             outputPath: "fonts",
-            esModule: false
-          }
-        }
+            esModule: false,
+          },
+        },
       },
       {
         test: /\.(png|jp?g|svg)$/,
-        use: [{
-          loader: "url-loader",
-          options: {
-            limit: 5000
-          }
-        }]
+        use: [
+          {
+            loader: "url-loader",
+            options: {
+              limit: 5000,
+            },
+          },
+        ],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
+        type: "asset/resource",
       },
-     
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: 'index.html',
+      template: "./src/index.html",
+      filename: "index.html",
     }),
   ],
 };
