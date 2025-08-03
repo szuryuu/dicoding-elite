@@ -138,16 +138,12 @@ let itemIsComplete = (id) => {
     localStorage.setItem(`${id}`, JSON.stringify(objBookChanged));
     alert(`Buku berjudul "${bookChanged.title}" telah selesai dibaca.`);
     // location.reload();
-
-    showBooks();
   } else {
     let objBookChanged = { ...bookChanged, isComplete: false };
 
     localStorage.setItem(`${id}`, JSON.stringify(objBookChanged));
     alert(`Buku berjudul "${bookChanged.title}" rupanya belum selesai dibaca.`);
     // location.reload();
-
-    showBooks();
   }
 
   showBooks();
