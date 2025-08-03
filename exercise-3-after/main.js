@@ -66,7 +66,14 @@ function showBooks() {
     bookItemYear.setAttribute("data-testid", "bookItemYear");
 
     let bookItemIsCompleteButton = document.createElement("button");
-    bookItemIsCompleteButton.textContent = "Selesai dibaca";
+    // bookItemIsCompleteButton.textContent = "Selesai dibaca";
+
+    if (bookInfo.isComplete) {
+      bookItemIsCompleteButton.textContent = "Belum selesai dibaca";
+    } else {
+      bookItemIsCompleteButton.textContent = "Selesai dibaca";
+    }
+
     bookItemIsCompleteButton.setAttribute("id", `${bookInfo.id}1`);
     bookItemIsCompleteButton.setAttribute(
       "data-testid",
@@ -121,33 +128,42 @@ function showBooks() {
 }
 
 let itemIsComplete = (id) => {
-  const idButton = Number(id.slice(0, -1));
-
-  let bookChanged = JSON.parse(localStorage.getItem(idButton));
+  // const idButton = Number(id.slice(0, -1));
+  console.log(id);
+  let bookChanged = JSON.parse(localStorage.getItem(id));
 
   if (bookChanged.isComplete == false) {
     let objBookChanged = { ...bookChanged, isComplete: true };
 
-    localStorage.setItem(`${idButton}`, JSON.stringify(objBookChanged));
+    localStorage.setItem(`${id}`, JSON.stringify(objBookChanged));
     alert(`Buku berjudul "${bookChanged.title}" telah selesai dibaca.`);
-    location.reload();
+    // location.reload();
+
+    showBooks();
   } else {
     let objBookChanged = { ...bookChanged, isComplete: false };
 
-    localStorage.setItem(`${idButton}`, JSON.stringify(objBookChanged));
+    localStorage.setItem(`${id}`, JSON.stringify(objBookChanged));
     alert(`Buku berjudul "${bookChanged.title}" rupanya belum selesai dibaca.`);
-    location.reload();
+    // location.reload();
+
+    showBooks();
   }
+
+  showBooks();
 };
 
 let deleteMe = (id) => {
-  const idButton = Number(id.slice(0, -1));
-  let bookChanged = JSON.parse(localStorage.getItem(idButton));
+  // const idButton = Number(id.slice(0, -1));
+  console.log(id);
+  let bookChanged = JSON.parse(localStorage.getItem(id));
 
-  localStorage.removeItem(`${idButton}`);
+  localStorage.removeItem(`${id}`);
 
   alert(`Buku berjudul "${bookChanged.title}" telah dihapus dari rak.`);
-  location.reload();
+  // location.reload();
+
+  showBooks();
 };
 
 let myLibrary = [];
@@ -156,8 +172,8 @@ function matchBook() {
   const valueSearchBook = document.getElementById("searchBookTitle").value;
 
   for (let i = 0; i < localStorage.length; i++) {
-    bookKey = localStorage.key(i);
-    bookInfo = JSON.parse(localStorage.getItem(`${bookKey}`));
+    let bookKey = localStorage.key(i);
+    let bookInfo = JSON.parse(localStorage.getItem(`${bookKey}`));
     myLibrary.push(bookInfo);
     console.log(myLibrary);
 
@@ -172,18 +188,24 @@ function matchBook() {
 
     let bookItemIsCompleteButton = document.createElement("button");
     bookItemIsCompleteButton.textContent = "Selesai dibaca";
+
     bookItemIsCompleteButton.setAttribute("id", `${bookInfo.id}1`);
     bookItemIsCompleteButton.setAttribute(
       "data-testid",
       "bookItemIsCompleteButton",
     );
-    bookItemIsCompleteButton.setAttribute("onclick", `itemIsComplete(id)`);
+    // bookItemIsCompleteButton.setAttribute("onclick", `itemIsComplete(id)`);
+    bookItemIsCompleteButton.setAttribute(
+      "onclick",
+      `itemIsComplete(${bookInfo.id})`,
+    );
 
     let bookItemDeleteButton = document.createElement("button");
     bookItemDeleteButton.textContent = "Hapus Buku";
     bookItemDeleteButton.setAttribute("id", `${bookInfo.id}2`);
     bookItemDeleteButton.setAttribute("data-testid", "bookItemDeleteButton");
-    bookItemDeleteButton.setAttribute("onclick", "deleteMe(id)");
+    // bookItemDeleteButton.setAttribute("onclick", "deleteMe(id)");
+    bookItemDeleteButton.setAttribute("onclick", `deleteMe(${bookInfo.id})`);
 
     let bookItemEditButton = document.createElement("button");
     bookItemEditButton.textContent = "Edit Buku";
@@ -213,7 +235,8 @@ function matchBook() {
 
     if (valueSearchBook == bookInfo.title) {
       const searchBookForm = document.getElementById("searchBook");
-      searchBookForm.append(container);
+      // searchBookForm.append(container);
+      searchBookForm.append(bookItem);
     }
   }
 }
