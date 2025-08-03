@@ -37,6 +37,8 @@ function addTodo() {
 
   document.getElementById("bookForm").reset();
   location.reload();
+
+  showBooks();
 }
 
 function showBooks() {
