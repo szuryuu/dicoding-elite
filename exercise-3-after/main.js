@@ -183,7 +183,13 @@ function matchBook() {
     bookItemYear.textContent = `Tahun: ${bookInfo.year}`;
 
     let bookItemIsCompleteButton = document.createElement("button");
-    bookItemIsCompleteButton.textContent = "Selesai dibaca";
+    // bookItemIsCompleteButton.textContent = "Selesai dibaca";
+
+    if (bookInfo.isComplete) {
+      bookItemIsCompleteButton.textContent = "Belum selesai dibaca";
+    } else {
+      bookItemIsCompleteButton.textContent = "Selesai dibaca";
+    }
 
     bookItemIsCompleteButton.setAttribute("id", `${bookInfo.id}1`);
     bookItemIsCompleteButton.setAttribute(
