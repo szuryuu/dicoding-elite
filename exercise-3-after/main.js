@@ -168,8 +168,12 @@ function matchBook() {
   const valueSearchBook = document.getElementById("searchBookTitle").value;
   const searchBookForm = document.getElementById("searchBook");
   const searchResult = document.getElementById("searchResult");
+  const existingEmptyMessage = document.getElementById("emptySearchMessage");
+  const existingNoResultMessage = document.getElementById("noResultMessage");
 
   searchResult.innerHTML = "";
+  if (existingEmptyMessage) existingEmptyMessage.remove();
+  if (existingNoResultMessage) existingNoResultMessage.remove();
 
   myLibrary = [];
 
@@ -245,6 +249,26 @@ function matchBook() {
       searchResult.appendChild(bookItem);
     }
   }
+
+  if (valueSearchBook.trim() === "") {
+    searchResult.innerHTML = "";
+    const emptySearchMessage = document.createElement("p");
+    emptySearchMessage.id = "emptySearchMessage";
+    emptySearchMessage.textContent = "Masukkan judul buku untuk mencari.";
+    emptySearchMessage.style.marginTop = "1rem";
+    emptySearchMessage.style.fontStyle = "italic";
+    searchBookForm.appendChild(emptySearchMessage);
+
+    return;
+  } else if (!searchResult.hasChildNodes()) {
+    const noResultMessage = document.createElement("p");
+    noResultMessage.id = "noResultMessage";
+    noResultMessage.textContent = "Buku tidak ditemukan.";
+    noResultMessage.style.marginTop = "1rem";
+    noResultMessage.style.fontStyle = "italic";
+    searchBookForm.appendChild(noResultMessage);
+  }
+
   searchBookForm.reset();
 }
 
