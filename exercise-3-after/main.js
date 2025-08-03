@@ -166,6 +166,12 @@ let myLibrary = [];
 
 function matchBook() {
   const valueSearchBook = document.getElementById("searchBookTitle").value;
+  const searchBookForm = document.getElementById("searchBook");
+  const searchResult = document.getElementById("searchResult");
+
+  searchResult.innerHTML = "";
+
+  myLibrary = [];
 
   for (let i = 0; i < localStorage.length; i++) {
     let bookKey = localStorage.key(i);
@@ -235,12 +241,11 @@ function matchBook() {
     bookItem.appendChild(bookItemYear);
     bookItem.appendChild(buttonContainer);
 
-    if (valueSearchBook == bookInfo.title) {
-      const searchBookForm = document.getElementById("searchBook");
-      // searchBookForm.append(container);
-      searchBookForm.append(bookItem);
+    if (bookInfo.title.toLowerCase().includes(valueSearchBook.toLowerCase())) {
+      searchResult.appendChild(bookItem);
     }
   }
+  searchBookForm.reset();
 }
 
 function clearBookLists() {
