@@ -9,19 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
   showBooks();
 });
 
-function addTodo() {
-  const id = new Date().getTime();
-  const title = document.getElementById("bookFormTitle").value;
-  const author = document.getElementById("bookFormAuthor").value;
-  const year = Number(document.getElementById("bookFormYear").value);
-  const isComplete = document.getElementById("bookFormIsComplete").checked;
+// function addTodo() {
+//   const id = new Date().getTime();
+//   const title = document.getElementById("bookFormTitle").value;
+//   const author = document.getElementById("bookFormAuthor").value;
+//   const year = Number(document.getElementById("bookFormYear").value);
+//   const isComplete = document.getElementById("bookFormIsComplete").checked;
 
-  const dataBook = { id, title, author, year, isComplete };
+//   const dataBook = { id, title, author, year, isComplete };
 
-  localStorage.setItem(`${id}`, JSON.stringify(dataBook));
-  console.log("data ditambahkan");
-  alert(`Buku berjudul "${title}" telah berhasil ditambahkan.`);
-}
+//   localStorage.setItem(`${id}`, JSON.stringify(dataBook));
+//   console.log("data ditambahkan");
+//   alert(`Buku berjudul "${title}" telah berhasil ditambahkan.`);
+// }
 
 function showBooks() {
   for (let i = 0; i < localStorage.length; i++) {
