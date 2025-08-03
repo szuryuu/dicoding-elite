@@ -36,16 +36,19 @@ function addTodo() {
   alert(`Buku berjudul "${title}" telah berhasil ditambahkan.`);
 
   document.getElementById("bookForm").reset();
-  location.reload();
 
   showBooks();
 }
 
 function showBooks() {
   clearBookLists();
+  notDoneYet = [];
+
   for (let i = 0; i < localStorage.length; i++) {
-    bookKey = localStorage.key(i);
-    bookInfo = JSON.parse(localStorage.getItem(`${bookKey}`));
+    // bookKey = localStorage.key(i);
+    // bookInfo = JSON.parse(localStorage.getItem(`${bookKey}`));
+    let bookKey = localStorage.key(i);
+    let bookInfo = JSON.parse(localStorage.getItem(`${bookKey}`));
 
     let bookItemTitle = document.createElement("h3");
     bookItemTitle.textContent = bookInfo.title;
@@ -69,13 +72,18 @@ function showBooks() {
       "data-testid",
       "bookItemIsCompleteButton",
     );
-    bookItemIsCompleteButton.setAttribute("onclick", `itemIsComplete(id)`);
+    // bookItemIsCompleteButton.setAttribute("onclick", `itemIsComplete(id)`);
+    bookItemIsCompleteButton.setAttribute(
+      "onclick",
+      `itemIsComplete(${bookInfo.id})`,
+    );
 
     let bookItemDeleteButton = document.createElement("button");
     bookItemDeleteButton.textContent = "Hapus Buku";
     bookItemDeleteButton.setAttribute("id", `${bookInfo.id}2`);
     bookItemDeleteButton.setAttribute("data-testid", "bookItemDeleteButton");
-    bookItemDeleteButton.setAttribute("onclick", "deleteMe(id)");
+    // bookItemDeleteButton.setAttribute("onclick", "deleteMe(id)");
+    bookItemDeleteButton.setAttribute("onclick", `deleteMe(${bookInfo.id})`);
 
     let bookItemEditButton = document.createElement("button");
     bookItemEditButton.textContent = "Edit Buku";
@@ -141,14 +149,6 @@ let deleteMe = (id) => {
   alert(`Buku berjudul "${bookChanged.title}" telah dihapus dari rak.`);
   location.reload();
 };
-
-document.addEventListener("DOMContentLoaded", function () {
-  const searchBookForm = document.getElementById("searchBook");
-  searchBookForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-    matchBook();
-  });
-});
 
 let myLibrary = [];
 
