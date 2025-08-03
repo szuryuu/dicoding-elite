@@ -1,44 +1,64 @@
 let notDoneYet = [];
 
 document.addEventListener("DOMContentLoaded", () => {
+  // const submitForm = document.getElementById("bookForm");
+  // submitForm.addEventListener("submit", function (event) {
+  //   event.preventDefault();
+  //   addTodo();
+  // });
+
   const submitForm = document.getElementById("bookForm");
   submitForm.addEventListener("submit", function (event) {
     event.preventDefault();
     addTodo();
   });
+
+  const searchBookForm = document.getElementById("searchBook");
+  searchBookForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    matchBook();
+  });
+
   showBooks();
 });
 
-// function addTodo() {
-//   const id = new Date().getTime();
-//   const title = document.getElementById("bookFormTitle").value;
-//   const author = document.getElementById("bookFormAuthor").value;
-//   const year = Number(document.getElementById("bookFormYear").value);
-//   const isComplete = document.getElementById("bookFormIsComplete").checked;
+function addTodo() {
+  const id = new Date().getTime();
+  const title = document.getElementById("bookFormTitle").value;
+  const author = document.getElementById("bookFormAuthor").value;
+  const year = Number(document.getElementById("bookFormYear").value);
+  const isComplete = document.getElementById("bookFormIsComplete").checked;
 
-//   const dataBook = { id, title, author, year, isComplete };
+  const dataBook = { id, title, author, year, isComplete };
 
-//   localStorage.setItem(`${id}`, JSON.stringify(dataBook));
-//   console.log("data ditambahkan");
-//   alert(`Buku berjudul "${title}" telah berhasil ditambahkan.`);
-// }
+  localStorage.setItem(`${id}`, JSON.stringify(dataBook));
+  console.log("data ditambahkan");
+  alert(`Buku berjudul "${title}" telah berhasil ditambahkan.`);
+
+  document.getElementById("bookForm").reset();
+  location.reload();
+}
 
 function showBooks() {
+  clearBookLists();
   for (let i = 0; i < localStorage.length; i++) {
     bookKey = localStorage.key(i);
     bookInfo = JSON.parse(localStorage.getItem(`${bookKey}`));
 
     let bookItemTitle = document.createElement("h3");
     bookItemTitle.textContent = bookInfo.title;
-    bookItemTitle.setAttribute("data-testid", `${bookInfo.title}`);
+    // bookItemTitle.setAttribute("data-testid", `${bookInfo.title}`);
+    bookItemTitle.setAttribute("data-testid", "bookItemTitle");
 
     let bookItemAuthor = document.createElement("p");
     bookItemAuthor.textContent = `Penulis: ${bookInfo.author}`;
-    bookItemAuthor.setAttribute("data-testid", `${bookInfo.author}`);
+    // bookItemAuthor.setAttribute("data-testid", `${bookInfo.author}`);
+    bookItemAuthor.setAttribute("data-testid", "bookItemAuthor");
 
     let bookItemYear = document.createElement("p");
     bookItemYear.textContent = `Tahun: ${bookInfo.year}`;
-    bookItemYear.setAttribute("data-testid", `${bookInfo.year}`);
+    // bookItemYear.setAttribute("data-testid", `${bookInfo.year}`);
+    bookItemYear.setAttribute("data-testid", "bookItemYear");
 
     let bookItemIsCompleteButton = document.createElement("button");
     bookItemIsCompleteButton.textContent = "Selesai dibaca";
@@ -194,4 +214,9 @@ function matchBook() {
       searchBookForm.append(container);
     }
   }
+}
+
+function clearBookLists() {
+  document.getElementById("incompleteBookList").innerHTML = "";
+  document.getElementById("completeBookList").innerHTML = "";
 }
